@@ -40,12 +40,17 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.2",
     "typescript": "^5.3.3",
-    "vite": "^5.0.0",
+    "vite": "^5.3.5",
     "vitest": "^1.2.0"
   },
   "prettier": {
     "semi": false,
     "singleQuote": true
   },
-  "browserslist": "> 2%, not dead"
+  "browserslist": "> 2%, not dead",
+  "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^5.16.6"
+  }
 }
