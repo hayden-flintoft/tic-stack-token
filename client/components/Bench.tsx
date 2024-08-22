@@ -1,8 +1,14 @@
-import React from 'react'
 import { Box, Grid } from '@mui/material'
-import Tile from './Tile.tsx'
+// import Tile from './Tile.tsx'
+import Token from './Token.tsx'
+import { Token as TokenType } from './App.tsx'
 
-const Bench = () => {
+type BenchProps = {
+  tokens: TokenType[]
+  onTokenClick: (token: TokenType) => void
+}
+
+const Bench = ({ tokens, onTokenClick }: BenchProps) => {
   return (
     <Box
       sx={{
@@ -14,26 +20,20 @@ const Bench = () => {
     >
       <Grid
         container
-        spacing={0}
+        spacing={1}
         sx={{ display: 'flex', justifyContent: 'center', width: 'fit-content' }}
       >
-        {Array.from({ length: 2 }).map((_, row) => (
+        {tokens.map((token, index) => (
           <Grid
-            container
             item
-            spacing={0}
-            key={row}
-            sx={{ justifyContent: 'center' }}
+            key={index}
+            sx={{ display: 'flex', justifyContent: 'center' }}
           >
-            {Array.from({ length: 3 }).map((_, col) => (
-              <Grid
-                item
-                key={col}
-                sx={{ display: 'flex', justifyContent: 'center' }}
-              >
-                <Tile value={`Bench ${row + 1}-${col + 1}`} />
-              </Grid>
-            ))}
+            <Token
+              number={token.number}
+              color={token.color}
+              onClick={() => onTokenClick(token)}
+            />
           </Grid>
         ))}
       </Grid>

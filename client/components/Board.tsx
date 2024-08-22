@@ -1,8 +1,15 @@
-import React from 'react'
 import { Box, Grid } from '@mui/material'
 import Tile from './Tile.tsx'
+import Token from './Token.tsx'
+import { Token as TokenType } from './App.tsx'
 
-const Board = () => {
+type BoardProps = {
+  boardState: (Token | null)[][]
+  onPlaceToken: (row: number, col: number) => void
+}
+
+// TODO: This is hard to read and harder to write. Needs to be rewritten and refactored.
+const Board = ({ boardState, onPlaceToken }: BoardProps) => {
   return (
     <Box
       sx={{
@@ -14,24 +21,34 @@ const Board = () => {
     >
       <Grid
         container
-        spacing={0}
+        spacing={1}
         sx={{ display: 'flex', justifyContent: 'center', width: 'fit-content' }}
       >
-        {Array.from({ length: 3 }).map((_, row) => (
+        {boardState.map((row, rowIndex) => (
           <Grid
             container
             item
-            spacing={0}
-            key={row}
+            spacing={1}
+            key={rowIndex}
             sx={{ justifyContent: 'center' }}
           >
-            {Array.from({ length: 3 }).map((_, col) => (
+            {row.map((cell, colIndex) => (
               <Grid
                 item
-                key={col}
+                key={colIndex}
                 sx={{ display: 'flex', justifyContent: 'center' }}
+                onClick={() => onPlaceToken(rowIndex, colIndex)}
               >
-                <Tile value={`Cell ${row + 1}-${col + 1}`} />
+                <Tile value={`Cell ${rowIndex + 1}-${colIndex + 1}`}>
+                  {cell && (
+                    <Token
+                      number={cell.number}
+                      color={cell.color}
+                      // No click function required.
+                      onClick={() => {}}
+                    />
+                  )}
+                </Tile>
               </Grid>
             ))}
           </Grid>
