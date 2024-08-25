@@ -5,19 +5,23 @@ import Footer from './Footer.tsx'
 import Board from './Board.tsx'
 import Feedback from './Feedback.tsx'
 import Bench from './Bench.tsx'
-// TODO: Split code out into functions with separation of concerns, DRY and single purpose methods.
-// TODO: Maybe add a game loop to handle all states.
-// TODO: Research when to use functions and when to use arrow functions
-// TODO: Implement Database to hold players and game stats.
-// TODO: Add routing for player profiles and stats.
+import History from './History.tsx'
 
-type Player = 'red' | 'black'
+export type Player = 'red' | 'black'
 
 export type Token = {
   number: number
   color: Player
-  isPlayed: boolean
-  isSelected: boolean
+  played: boolean
+  selected: boolean
+  available: boolean
+}
+
+export type MoveLog = {
+  player?: Player
+  token?: Token
+  position?: [number, number]
+  replacedToken?: { token: Token; replacedBy: Player }
 }
 
 type GameState =
@@ -34,29 +38,102 @@ function App() {
   const [gameState, setGameState] = useState<GameState>('START')
   const [selectedToken, setSelectedToken] = useState<Token | null>(null)
   const [feedbackMessage, setFeedbackMessage] = useState<string>('Game Start!')
-
+  const [moveLog, setMoveLog] = useState<MoveLog[]>([])
   const [redTokens, setRedTokens] = useState<Token[]>([
-    { number: 1, color: 'red', isPlayed: false, isSelected: false },
-    { number: 2, color: 'red', isPlayed: false, isSelected: false },
-    { number: 3, color: 'red', isPlayed: false, isSelected: false },
-    { number: 4, color: 'red', isPlayed: false, isSelected: false },
-    { number: 5, color: 'red', isPlayed: false, isSelected: false },
-    { number: 6, color: 'red', isPlayed: false, isSelected: false },
+    {
+      number: 1,
+      color: 'red',
+      played: false,
+      selected: false,
+      available: true,
+    },
+    {
+      number: 2,
+      color: 'red',
+      played: false,
+      selected: false,
+      available: true,
+    },
+    {
+      number: 3,
+      color: 'red',
+      played: false,
+      selected: false,
+      available: true,
+    },
+    {
+      number: 4,
+      color: 'red',
+      played: false,
+      selected: false,
+      available: true,
+    },
+    {
+      number: 5,
+      color: 'red',
+      played: false,
+      selected: false,
+      available: true,
+    },
+    {
+      number: 6,
+      color: 'red',
+      played: false,
+      selected: false,
+      available: true,
+    },
   ])
-  const [blackTokens, setblackTokens] = useState<Token[]>([
-    { number: 1, color: 'black', isPlayed: false, isSelected: false },
-    { number: 2, color: 'black', isPlayed: false, isSelected: false },
-    { number: 3, color: 'black', isPlayed: false, isSelected: false },
-    { number: 4, color: 'black', isPlayed: false, isSelected: false },
-    { number: 5, color: 'black', isPlayed: false, isSelected: false },
-    { number: 6, color: 'black', isPlayed: false, isSelected: false },
+
+  const [blackTokens, setBlackTokens] = useState<Token[]>([
+    {
+      number: 1,
+      color: 'black',
+      played: false,
+      selected: false,
+      available: true,
+    },
+    {
+      number: 2,
+      color: 'black',
+      played: false,
+      selected: false,
+      available: true,
+    },
+    {
+      number: 3,
+      color: 'black',
+      played: false,
+      selected: false,
+      available: true,
+    },
+    {
+      number: 4,
+      color: 'black',
+      played: false,
+      selected: false,
+      available: true,
+    },
+    {
+      number: 5,
+      color: 'black',
+      played: false,
+      selected: false,
+      available: true,
+    },
+    {
+      number: 6,
+      color: 'black',
+      played: false,
+      selected: false,
+      available: true,
+    },
   ])
+
   const [boardState, setBoardState] = useState<(Token | null)[][]>(
     Array(3).fill(Array(3).fill(null)),
   )
 
   useEffect(() => {
-    // TODO: Review feedback messages and remove redundant ones.
     switch (gameState) {
       case 'START':
         setFeedbackMessage('Game Start! Player Red, select your token')
@@ -64,28 +141,22 @@ function App() {
         break
 
       case 'SELECT_TOKEN':
-        // Wait for player to select a token
         setFeedbackMessage(
           `Player ${currentPlayer === 'red' ? 'Red' : 'Black'}, select your token.`,
         )
         break
 
       case 'SELECT_TILE':
-        // Wait for player to select a tile
         setFeedbackMessage(
-          `Player ${currentPlayer === 'red' ? 'Red' : 'Black'}, place your token.`, // TODO: Provide verbose info like which token is selected
+          `Player ${currentPlayer === 'red' ? 'Red' : 'Black'}, place your token.`,
         )
         break
 
       case 'PLACE_TOKEN':
-        // Place the token on the board
-        // Transition to CHECK_WIN
-        setFeedbackMessage(`Placing token...`)
         setGameState('CHECK_WIN')
         break
 
       case 'CHECK_WIN': {
-        // Check for win condition
         const isWin = checkWinCondition()
         if (isWin) {
           setFeedbackMessage(
@@ -98,18 +169,16 @@ function App() {
         }
         break
       }
+
       case 'SWITCH_PLAYER':
         setCurrentPlayer(currentPlayer === 'red' ? 'black' : 'red')
-        setFeedbackMessage(
-          `Player ${currentPlayer === 'red' ? 'Red' : 'Black'}'s turn.`,
-        )
+        resetTokensAvailability() // Reset available tokens for the next player
         setGameState('SELECT_TOKEN')
         break
 
       case 'END':
-        // TODO: End of game logic
         setFeedbackMessage(
-          `Game Over. Player ${currentPlayer === 'red' ? 'Red' : 'Black'}'wins!.`,
+          `Game Over. Player ${currentPlayer === 'red' ? 'Red' : 'Black'} wins!`,
         )
         break
 
@@ -118,47 +187,101 @@ function App() {
     }
   }, [gameState, currentPlayer])
 
-  const handleTokenClick = (token: Token) => {
-    if (gameState !== 'SELECT_TOKEN' || token.isPlayed) return
-
-    setSelectedToken(token)
-    const updateTokens = (tokens: Token[]) => {
-      return tokens.map((t) => ({ ...t, isSelected: t === token }))
-    }
-
+  const resetTokensAvailability = () => {
+    const updateTokens = (tokens: Token[]) =>
+      tokens.map((t) =>
+        !t.played ? { ...t, available: true, selected: false } : t,
+      )
     if (currentPlayer === 'red') {
       setRedTokens(updateTokens(redTokens))
     } else {
-      setblackTokens(updateTokens(blackTokens))
+      setBlackTokens(updateTokens(blackTokens))
     }
+  }
 
-    setGameState('SELECT_TILE')
+  const handleTokenClick = (token: Token) => {
+    if (token.played || !token.available) return // Do nothing if the token is played or unavailable
+
+    if (
+      selectedToken &&
+      selectedToken.number === token.number &&
+      selectedToken.color === token.color
+    ) {
+      // Deselect the current token and reset availability
+      console.log(`Deselecting token: ${token.number}`)
+      setSelectedToken(null)
+      resetTokensAvailability()
+    } else {
+      console.log(`Selecting token: ${token.number}`)
+      setSelectedToken(token)
+      const updateTokens = (tokens: Token[]) =>
+        tokens.map((t) => ({
+          ...t,
+          selected: t === token,
+          available: t === token, // Only the selected token remains available
+        }))
+
+      if (currentPlayer === 'red') {
+        setRedTokens(updateTokens(redTokens))
+      } else {
+        setBlackTokens(updateTokens(blackTokens))
+      }
+
+      setGameState('SELECT_TILE')
+    }
   }
 
   const handlePlaceToken = (row: number, col: number) => {
     if (gameState !== 'SELECT_TILE' || !selectedToken) return
 
-    // Check if the selected tile is vacant or occupied by a lower value token
     const currentCell = boardState[row][col]
+    let replacedToken: { token: Token; replacedBy: Player } | undefined
+
+    if (currentCell !== null && selectedToken.number > currentCell.number) {
+      replacedToken = {
+        token: { ...currentCell },
+        replacedBy: currentPlayer,
+      }
+    }
+
     if (currentCell === null || selectedToken.number > currentCell.number) {
-      const updatedBoard = [...boardState]
-      updatedBoard[row][col] = { ...selectedToken, isPlayed: true }
+      const updatedBoard = boardState.map((r, rIndex) =>
+        r.map((c, cIndex) => {
+          if (rIndex === row && cIndex === col) {
+            return { ...selectedToken, played: true }
+          }
+          return c
+        }),
+      )
+
       setBoardState(updatedBoard)
 
-      // Mark the selected token as played
-      const updateTokens = (tokens: Token[]) => {
-        return tokens.map((t) =>
-          t === selectedToken ? { ...t, isPlayed: true } : t,
+      const updateTokens = (tokens: Token[]) =>
+        tokens.map((t) =>
+          t.number === selectedToken.number && t.color === selectedToken.color
+            ? { ...t, played: true, selected: false, available: false }
+            : t,
         )
-      }
 
       if (currentPlayer === 'red') {
         setRedTokens(updateTokens(redTokens))
       } else {
-        setblackTokens(updateTokens(blackTokens))
+        setBlackTokens(updateTokens(blackTokens))
       }
 
-      setGameState('PLACE_TOKEN')
+      const newMove: MoveLog = {
+        player: currentPlayer,
+        token: { ...selectedToken },
+        position: [row, col],
+        replacedToken: replacedToken,
+      }
+
+      setMoveLog((prevLog) => [...prevLog, newMove])
+
+      setSelectedToken(null)
+      setGameState('CHECK_WIN')
+
+      console.log('Move Log:', [...moveLog, newMove])
     }
   }
 
@@ -184,11 +307,12 @@ function App() {
       >
         <Header />
         <Board boardState={boardState} onPlaceToken={handlePlaceToken} />
-        <Feedback message={feedbackMessage} />
         <Bench
           tokens={currentPlayer === 'red' ? redTokens : blackTokens}
           onTokenClick={handleTokenClick}
         />
+        <Feedback message={feedbackMessage} />
+        <History moveLog={moveLog} currentPlayer={currentPlayer} />
         <Footer />
       </Box>
     </React.Fragment>

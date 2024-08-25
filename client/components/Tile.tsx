@@ -1,6 +1,12 @@
 import { Paper } from '@mui/material'
+import React from 'react'
 
-const Tile = ({ value }: { value: string }) => {
+type TileProps = {
+  value: string
+  children?: React.ReactNode
+}
+
+const Tile = ({ children }: TileProps) => {
   return (
     <Paper
       elevation={12}
@@ -19,7 +25,7 @@ const Tile = ({ value }: { value: string }) => {
         },
       }}
     >
-      {value}
+      {children}
     </Paper>
   )
 }

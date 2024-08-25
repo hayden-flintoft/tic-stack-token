@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Paper, Typography } from '@mui/material'
 
 type FeedbackProps = {
   message: string
@@ -6,9 +6,20 @@ type FeedbackProps = {
 
 const Feedback = ({ message }: FeedbackProps) => {
   return (
-    <Box sx={{ textAlign: 'center', my: 2 }}>
+    <Paper
+      elevation={12}
+      sx={{
+        textAlign: 'center',
+        my: 2,
+        mt: 3,
+        width: 500,
+        padding: '10px',
+        margin: '0 auto',
+        border: '1px solid black',
+      }}
+    >
       <Typography variant="h6">{message}</Typography>
-    </Box>
+    </Paper>
   )
 }
 

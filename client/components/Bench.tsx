@@ -23,19 +23,24 @@ const Bench = ({ tokens, onTokenClick }: BenchProps) => {
         spacing={1}
         sx={{ display: 'flex', justifyContent: 'center', width: 'fit-content' }}
       >
-        {tokens.map((token, index) => (
-          <Grid
-            item
-            key={index}
-            sx={{ display: 'flex', justifyContent: 'center' }}
-          >
-            <Token
-              number={token.number}
-              color={token.color}
-              onClick={() => onTokenClick(token)}
-            />
-          </Grid>
-        ))}
+        {tokens.map(
+          (token, index) =>
+            !token.played && (
+              <Grid
+                item
+                key={index}
+                sx={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <Token
+                  number={token.number}
+                  color={token.color}
+                  onClick={() => onTokenClick(token)}
+                  available={token.available}
+                  selected={token.selected}
+                />
+              </Grid>
+            ),
+        )}
       </Grid>
     </Box>
   )

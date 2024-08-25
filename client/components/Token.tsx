@@ -4,9 +4,11 @@ type TokenProps = {
   number: number
   color: 'red' | 'black'
   onClick: () => void
+  available: boolean
+  selected: boolean
 }
 
-const Token = ({ number, color, onClick }: TokenProps) => {
+const Token = ({ number, color, onClick, available, selected }: TokenProps) => {
   return (
     <Paper
       onClick={onClick}
@@ -17,16 +19,23 @@ const Token = ({ number, color, onClick }: TokenProps) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: color === 'red' ? '#f44336' : '#0a1520',
+        backgroundColor: selected
+          ? color === 'red'
+            ? '#d32f2f' // Darker red when selected
+            : '#0a1520' // Darker black when selected
+          : color === 'red'
+            ? '#f44336'
+            : '#0a1520',
         color: '#fff',
         fontSize: '1.5rem',
         fontWeight: 'bold',
-        border: '2px solid #fff',
-        cursor: 'pointer',
+        border: selected ? '3px solid yellow' : '2px solid #fff',
+        cursor: available ? 'pointer' : 'not-allowed',
         transition: 'transform 0.2s',
         '&:hover': {
-          transform: 'scale(1.1)',
+          transform: available ? 'scale(1.1)' : 'none',
         },
+        opacity: available ? 1 : 0.5, // Dull appearance when unavailable
       }}
     >
       <Typography variant="h4" component="span">

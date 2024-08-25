@@ -4,7 +4,7 @@ import Token from './Token.tsx'
 import { Token as TokenType } from './App.tsx'
 
 type BoardProps = {
-  boardState: (Token | null)[][]
+  boardState: (TokenType | null)[][]
   onPlaceToken: (row: number, col: number) => void
 }
 
@@ -44,6 +44,8 @@ const Board = ({ boardState, onPlaceToken }: BoardProps) => {
                     <Token
                       number={cell.number}
                       color={cell.color}
+                      available={cell.available}
+                      selected={cell.selected}
                       // No click function required.
                       onClick={() => {}}
                     />
