@@ -6,10 +6,11 @@ import { Token as TokenType } from './App.tsx'
 type BoardProps = {
   boardState: (TokenType | null)[][]
   onPlaceToken: (row: number, col: number) => void
+  currentPlayer: 'red' | 'black'
 }
 
 // TODO: This is hard to read and harder to write. Needs to be rewritten and refactored.
-const Board = ({ boardState, onPlaceToken }: BoardProps) => {
+const Board = ({ boardState, onPlaceToken, currentPlayer }: BoardProps) => {
   return (
     <Box
       sx={{
@@ -39,14 +40,16 @@ const Board = ({ boardState, onPlaceToken }: BoardProps) => {
                 sx={{ display: 'flex', justifyContent: 'center' }}
                 onClick={() => onPlaceToken(rowIndex, colIndex)}
               >
-                <Tile value={`Cell ${rowIndex + 1}-${colIndex + 1}`}>
+                <Tile
+                  currentPlayer={currentPlayer}
+                  value={`Cell ${rowIndex + 1}-${colIndex + 1}`}
+                >
                   {cell && (
                     <Token
                       number={cell.number}
                       color={cell.color}
                       available={cell.available}
                       selected={cell.selected}
-                      // No click function required.
                       onClick={() => {}}
                     />
                   )}

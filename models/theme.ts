@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles'
+import { createTheme, ThemeOptions } from '@mui/material/styles'
 
 const theme = createTheme({
   palette: {
@@ -9,10 +9,24 @@ const theme = createTheme({
       contrastText: '#fff',
     },
     secondary: {
-      light: '#ff7961',
-      main: '#f44336',
-      dark: '#ba000d',
+      light: '#ff5f52',
+      main: '#d32f2f',
+      dark: '#9a0007',
       contrastText: '#000',
+    },
+    playerOne: {
+      // Red
+      light: '#ff5f52',
+      main: '#A0100C',
+      dark: '#9a0007',
+      contrastText: '#fff',
+    },
+    playerTwo: {
+      // Black
+      light: '#424242',
+      main: '#000000',
+      dark: '#000000',
+      contrastText: '#fff',
     },
     error: {
       main: '#f44336', // Red
@@ -30,12 +44,14 @@ const theme = createTheme({
   typography: {
     h1: {
       fontSize: '2.5rem',
-      fontWeight: 500,
+      fontWeight: 600,
+      letterSpacing: '0.5px',
+      // color: '#d32f2f',
     },
     body1: {
       fontSize: '1rem',
     },
   },
-})
+} as ThemeOptions)
 
 export default theme

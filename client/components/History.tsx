@@ -35,7 +35,7 @@ const History: React.FC<HistoryProps> = ({ moveLog, currentPlayer }) => {
       elevation={12}
       sx={{
         mt: 3,
-        maxWidth: 500,
+        maxWidth: 600,
         margin: '0 auto',
         border: '1px solid black',
       }}

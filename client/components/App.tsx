@@ -6,6 +6,8 @@ import Board from './Board.tsx'
 import Feedback from './Feedback.tsx'
 import Bench from './Bench.tsx'
 import History from './History.tsx'
+import { useTheme } from '@mui/material/styles'
+import { alpha } from '@mui/material/styles'
 
 export type Player = 'red' | 'black'
 
@@ -35,6 +37,7 @@ type GameState =
   | 'STALEMATE'
 
 function App() {
+  const theme = useTheme()
   const [currentPlayer, setCurrentPlayer] = useState<Player>('red')
   const [gameState, setGameState] = useState<GameState>('START')
   const [selectedToken, setSelectedToken] = useState<Token | null>(null)
@@ -396,11 +399,20 @@ function App() {
           minHeight: '100vh',
           textAlign: 'center',
           color: 'primary.contrastText',
-          backgroundColor: 'primary.light',
+          // backgroundColor: 'primary.light',
+          backgroundColor:
+            currentPlayer === 'red'
+              ? alpha(theme.palette.playerOne.main, 0.9)
+              : alpha(theme.palette.playerTwo.main, 0.9),
+          transition: 'background-color 0.5s ease',
         }}
       >
         <Header />
-        <Board boardState={boardState} onPlaceToken={handlePlaceToken} />
+        <Board
+          boardState={boardState}
+          onPlaceToken={handlePlaceToken}
+          currentPlayer={currentPlayer}
+        />
         <Bench
           tokens={currentPlayer === 'red' ? redTokens : blackTokens}
           onTokenClick={handleTokenClick}

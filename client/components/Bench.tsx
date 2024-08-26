@@ -1,5 +1,4 @@
-import { Box, Grid } from '@mui/material'
-// import Tile from './Tile.tsx'
+import { Box, Grid, Paper } from '@mui/material'
 import Token from './Token.tsx'
 import { Token as TokenType } from './App.tsx'
 
@@ -10,39 +9,61 @@ type BenchProps = {
 
 const Bench = ({ tokens, onTokenClick }: BenchProps) => {
   return (
-    <Box
+    <Paper
+      elevation={4}
       sx={{
+        width: 600,
+        maxWidth: '100%',
+        mx: 'auto',
+        my: 2,
+        mt: 3,
+        p: 2,
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
-        my: 2,
       }}
     >
-      <Grid
-        container
-        spacing={1}
-        sx={{ display: 'flex', justifyContent: 'center', width: 'fit-content' }}
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
       >
-        {tokens.map(
-          (token, index) =>
-            !token.played && (
-              <Grid
-                item
-                key={index}
-                sx={{ display: 'flex', justifyContent: 'center' }}
-              >
-                <Token
-                  number={token.number}
-                  color={token.color}
-                  onClick={() => onTokenClick(token)}
-                  available={token.available}
-                  selected={token.selected}
-                />
-              </Grid>
-            ),
-        )}
-      </Grid>
-    </Box>
+        <Grid
+          container
+          spacing={1}
+          sx={{
+            justifyContent: 'center',
+            width: tokens.length === 6 ? 'fit-content' : '80%', // Ensure the bench remains consistent
+            minWidth: '420px', // Adjust this to match the required width of the bench
+          }}
+        >
+          {tokens.map(
+            (token, index) =>
+              !token.played && (
+                <Grid
+                  item
+                  key={index}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flex: '1 1 auto',
+                  }}
+                >
+                  <Token
+                    number={token.number}
+                    color={token.color}
+                    onClick={() => onTokenClick(token)}
+                    available={token.available}
+                    selected={token.selected}
+                  />
+                </Grid>
+              ),
+          )}
+        </Grid>
+      </Box>
+    </Paper>
   )
 }
 

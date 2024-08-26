@@ -12,7 +12,7 @@ const Feedback = ({ message }: FeedbackProps) => {
         textAlign: 'center',
         my: 2,
         mt: 3,
-        width: 500,
+        width: 600,
         padding: '10px',
         margin: '10px auto',
         border: '1px solid black',
