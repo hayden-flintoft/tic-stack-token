@@ -8,14 +8,14 @@ This project is a personal endeavour to deepen my understanding of various aspec
 
 ## MVP (Minimum Viable Product)
 
-- [ ] **Goal:** To develop a playable game between two human players without involving routes, APIs, or databases.
+- [x] **Goal:** To develop a playable game between two human players without involving routes, APIs, or databases.
 
 **Objectives:**
 
-- [ ] Implement the core game logic to handle two-player gameplay.
-- [ ] Design and build the game interface using React and Material UI.
-- [ ] Ensure smooth interaction between the players through responsive UI and real-time updates.
-- [ ] Test the game thoroughly to ensure that all game rules are enforced correctly.
+- [x] Implement the core game logic to handle two-player gameplay.
+- [x] Design and build the game interface using React and Material UI.
+- [x] Ensure smooth interaction between the players through responsive UI and real-time updates.
+- [x] Test the game thoroughly to ensure that all game rules are enforced correctly.
 
 ## 1. React Development
 
@@ -24,7 +24,7 @@ This project is a personal endeavour to deepen my understanding of various aspec
 **Objectives:**
 
 - [ ] Master component-based architecture in React to manage complex UIs.
-- [ ] Learn state management techniques using hooks (e.g., `useState`, `useEffect`) to maintain and update the game state.
+- [x] Learn state management techniques using hooks (e.g., `useState`, `useEffect`) to maintain and update the game state.
 - [ ] Implement efficient rendering strategies to optimise the performance of the game interface.
 
 ## 2. Game Logic
@@ -33,9 +33,9 @@ This project is a personal endeavour to deepen my understanding of various aspec
 
 **Objectives:**
 
-- [ ] Design and implement core game mechanics, including turn-based play, win conditions, and handling draws.
+- [x] Design and implement core game mechanics, including turn-based play, win conditions, and handling draws.
 - [ ] Develop reusable logic components that can be adapted to different game scenarios or extended for future enhancements.
-- [ ] Test game logic to ensure correctness and handle edge cases effectively.
+- [x] Test game logic to ensure correctness and handle edge cases effectively.
 
 ## 3. UI/UX Design
 
@@ -44,7 +44,7 @@ This project is a personal endeavour to deepen my understanding of various aspec
 **Objectives:**
 
 - [ ] Apply UI/UX best practices to design a clean and user-friendly interface.
-- [ ] Explore and implement Material UI components to achieve a consistent look and feel.
+- [x] Explore and implement Material UI components to achieve a consistent look and feel.
 - [ ] Ensure the game interface is responsive and accessible across different devices and screen sizes.
 
 ## Stretch Goal: AI Player

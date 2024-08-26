@@ -32,6 +32,7 @@ type GameState =
   | 'CHECK_WIN'
   | 'SWITCH_PLAYER'
   | 'END'
+  | 'STALEMATE'
 
 function App() {
   const [currentPlayer, setCurrentPlayer] = useState<Player>('red')
@@ -141,9 +142,22 @@ function App() {
         break
 
       case 'SELECT_TOKEN':
-        setFeedbackMessage(
-          `Player ${currentPlayer === 'red' ? 'Red' : 'Black'}, select your token.`,
-        )
+        if (!hasPlayableTokens(currentPlayer)) {
+          const nextPlayer = currentPlayer === 'red' ? 'black' : 'red'
+          if (!hasPlayableTokens(nextPlayer)) {
+            setFeedbackMessage('Stalemate! No valid moves for either player.')
+            setGameState('END')
+          } else {
+            setFeedbackMessage(
+              `Player ${currentPlayer === 'red' ? 'Red' : 'Black'} has no valid moves. Skipping turn.`,
+            )
+            setGameState('SWITCH_PLAYER')
+          }
+        } else {
+          setFeedbackMessage(
+            `Player ${currentPlayer === 'red' ? 'Red' : 'Black'}, select your token.`,
+          )
+        }
         break
 
       case 'SELECT_TILE':
@@ -158,11 +172,15 @@ function App() {
 
       case 'CHECK_WIN': {
         const isWin = checkWinCondition()
+        const isStalemate = checkStalemate()
         if (isWin) {
           setFeedbackMessage(
             `Player ${currentPlayer === 'red' ? 'Red' : 'Black'} wins!`,
           )
           setGameState('END')
+        } else if (isStalemate) {
+          setFeedbackMessage('Stalemate! No more valid moves.')
+          setGameState('STALEMATE')
         } else {
           setFeedbackMessage(`No winner yet, switching player...`)
           setGameState('SWITCH_PLAYER')
@@ -285,10 +303,86 @@ function App() {
     }
   }
 
-  const checkWinCondition = () => {
-    // TODO: Implement win condition logic
+  const checkWinCondition = (): boolean => {
+    const winPatterns = [
+      // Rows
+      [
+        [0, 0],
+        [0, 1],
+        [0, 2],
+      ],
+      [
+        [1, 0],
+        [1, 1],
+        [1, 2],
+      ],
+      [
+        [2, 0],
+        [2, 1],
+        [2, 2],
+      ],
+      // Columns
+      [
+        [0, 0],
+        [1, 0],
+        [2, 0],
+      ],
+      [
+        [0, 1],
+        [1, 1],
+        [2, 1],
+      ],
+      [
+        [0, 2],
+        [1, 2],
+        [2, 2],
+      ],
+      // Diagonals
+      [
+        [0, 0],
+        [1, 1],
+        [2, 2],
+      ],
+      [
+        [0, 2],
+        [1, 1],
+        [2, 0],
+      ],
+    ]
 
-    return false // Placeholder
+    return winPatterns.some((pattern) =>
+      pattern.every(
+        ([r, c]) =>
+          boardState[r][c] && boardState[r][c]!.color === currentPlayer,
+      ),
+    )
+  }
+
+  const checkStalemate = (): boolean => {
+    const allTokensPlayed =
+      redTokens.every((t) => t.played) && blackTokens.every((t) => t.played)
+    const noValidMoves =
+      !hasPlayableTokens('red') && !hasPlayableTokens('black')
+
+    return allTokensPlayed || noValidMoves
+  }
+
+  const hasPlayableTokens = (player: Player): boolean => {
+    const playerTokens = player === 'red' ? redTokens : blackTokens
+    const hasTokensLeft = playerTokens.some((token) => !token.played)
+
+    if (!hasTokensLeft) return false
+
+    const canPlayOnBoard = playerTokens.some((token) => {
+      if (token.played) return false
+      return boardState.some((row) =>
+        row.some(
+          (cell) => cell === null || (cell && token.number > cell.number),
+        ),
+      )
+    })
+
+    return canPlayOnBoard
   }
 
   return (

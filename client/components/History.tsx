@@ -7,6 +7,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Typography,
 } from '@mui/material'
 import { Player, MoveLog } from './App'
 
@@ -32,8 +33,14 @@ const History: React.FC<HistoryProps> = ({ moveLog, currentPlayer }) => {
     <TableContainer
       component={Paper}
       elevation={12}
-      sx={{ mt: 3, maxWidth: 500, margin: '0 auto', border: '1px solid black' }}
+      sx={{
+        mt: 3,
+        maxWidth: 500,
+        margin: '0 auto',
+        border: '1px solid black',
+      }}
     >
+      <Typography variant="h6">History</Typography>
       <Table size="small" aria-label="Move History">
         <TableHead>
           <TableRow>
