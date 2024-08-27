@@ -10,4 +10,15 @@ declare module '@mui/material/styles' {
     playerOne?: PaletteOptions['primary']
     playerTwo?: PaletteOptions['primary']
   }
+
+  interface Theme {
+    customSizes: {
+      componentWidth: number
+    }
+  }
+  interface ThemeOptions {
+    customSizes?: {
+      componentWidth?: number
+    }
+  }
 }

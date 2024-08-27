@@ -23,9 +23,9 @@ const theme = createTheme({
     },
     playerTwo: {
       // Black
-      light: '#424242',
-      main: '#000000',
-      dark: '#000000',
+      light: '#0a0a0a',
+      main: '#0a0a0a',
+      dark: '#0a0a0a',
       contrastText: '#fff',
     },
     error: {
@@ -51,6 +51,9 @@ const theme = createTheme({
     body1: {
       fontSize: '1rem',
     },
+  },
+  customSizes: {
+    componentWidth: 400, // Custom width for components
   },
 } as ThemeOptions)
 

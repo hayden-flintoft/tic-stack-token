@@ -1,4 +1,4 @@
-import { Box, Grid, Paper } from '@mui/material'
+import { Box, Grid, Paper, useTheme } from '@mui/material'
 import Token from './Token.tsx'
 import { Token as TokenType } from './App.tsx'
 
@@ -8,10 +8,12 @@ type BenchProps = {
 }
 
 const Bench = ({ tokens, onTokenClick }: BenchProps) => {
+  const theme = useTheme()
   return (
     <Paper
       elevation={4}
       sx={{
+        // width: theme.customSizes.componentWidth,
         width: 600,
         maxWidth: '100%',
         mx: 'auto',
@@ -20,6 +22,8 @@ const Bench = ({ tokens, onTokenClick }: BenchProps) => {
         p: 2,
         display: 'flex',
         justifyContent: 'center',
+        boxShadow: 'inset 0px 3px 8px rgba(0, 0, 0, 0.4)',
+        backgroundColor: theme.palette.background.paper,
       }}
     >
       <Box
