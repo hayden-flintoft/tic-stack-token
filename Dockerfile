@@ -1,18 +1,22 @@
-FROM node:20-alpine as BUILDER
+# Stage 1: Build the React app
+FROM node:20-alpine AS builder
+
 WORKDIR /app
 
-COPY ["package.json", "package-lock.json*", "./"]
+# Install dependencies and build the app
+COPY package.json package-lock.json ./
 RUN npm ci
-
-COPY . .
-
-ENV NODE_ENV=production
+COPY . ./
 RUN npm run build
 
+# Stage 2: Serve the app with nginx
 FROM nginx:stable-alpine
-WORKDIR /app
 
-COPY --from=BUILDER /app/dist /app/www
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copy the build output to replace the default nginx contents
+COPY --from=builder /app/dist /usr/share/nginx/html
 
+# Expose port 80
 EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
