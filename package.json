@@ -4,9 +4,8 @@
   "version": "0.2.0",
   "description": "React!",
   "repository": "https://github.com/dev-academy-challenges/react-boilerplate.git",
-  "main": "server/index.js",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "vite",
     "dev": "vite",
     "test": "vitest",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
