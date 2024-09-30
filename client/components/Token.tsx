@@ -1,9 +1,12 @@
+// client/components/Token.tsx
+
 import React from 'react'
 import { Paper, Typography, useTheme } from '@mui/material'
+import { Token as TokenType, Player } from '../types'
 
 type TokenProps = {
   number: number
-  color: 'red' | 'black'
+  color: Player
   onClick: () => void
   available: boolean
   selected: boolean
@@ -14,11 +17,10 @@ const Token = ({ number, color, onClick, available, selected }: TokenProps) => {
 
   return (
     <Paper
-      // elevation={20}
       onClick={onClick}
       sx={{
-        height: '80px',
-        width: '80px',
+        height: { xs: '40px', sm: '60px', md: '80px' }, // Responsive heights
+        width: { xs: '40px', sm: '60px', md: '80px' }, // Responsive widths
         borderRadius: '50%',
         display: 'flex',
         alignItems: 'center',
@@ -34,7 +36,7 @@ const Token = ({ number, color, onClick, available, selected }: TokenProps) => {
           color === 'red'
             ? theme.palette.playerOne.contrastText
             : theme.palette.playerTwo.contrastText,
-        fontSize: '1.5rem',
+        fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' }, // Responsive font sizes
         fontWeight: 'bold',
         cursor: available ? 'pointer' : 'not-allowed',
         transition: 'transform 0.2s',
@@ -54,8 +56,6 @@ const Token = ({ number, color, onClick, available, selected }: TokenProps) => {
           right: '10%',
           bottom: '10%',
           borderRadius: '50%',
-          // background: `linear-gradient(145deg, ${theme.palette.playerOne.dark}, ${theme.palette.playerOne.dark})`,
-
           background: `linear-gradient(145deg, ${
             color === 'red'
               ? theme.palette.playerOne.dark
@@ -65,7 +65,6 @@ const Token = ({ number, color, onClick, available, selected }: TokenProps) => {
               ? theme.palette.playerOne.dark
               : theme.palette.playerTwo.main
           })`,
-
           boxShadow: 'inset 0px 3px 6px rgba(0, 0, 0, 0.4)',
         },
       }}

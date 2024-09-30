@@ -1,11 +1,13 @@
+// client/components/Tile.tsx
+
 import { Paper } from '@mui/material'
 import React from 'react'
 import { alpha, useTheme } from '@mui/material/styles'
+import { Player } from '../types'
 
 type TileProps = {
-  value: string
   children?: React.ReactNode
-  currentPlayer: 'red' | 'black'
+  currentPlayer: Player
 }
 
 const Tile = ({ children, currentPlayer }: TileProps) => {
@@ -14,8 +16,8 @@ const Tile = ({ children, currentPlayer }: TileProps) => {
     <Paper
       elevation={12}
       sx={{
-        height: '100px',
-        width: '100px',
+        height: { xs: '60px', sm: '80px', md: '100px' }, // Responsive heights
+        width: { xs: '60px', sm: '80px', md: '100px' }, // Responsive widths
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

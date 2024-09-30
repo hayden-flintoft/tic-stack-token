@@ -1,111 +1,56 @@
+// client/components/History.tsx
+
 import React from 'react'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Typography,
-} from '@mui/material'
-import { Player, MoveLog } from './App'
+import { Box, Typography, Paper } from '@mui/material'
+import { MoveLog, Player } from '../types'
 
 type HistoryProps = {
   moveLog: MoveLog[]
   currentPlayer: Player
 }
 
-const History: React.FC<HistoryProps> = ({ moveLog, currentPlayer }) => {
-  const totalTurns = 12 // Ensures the table always shows 12 turns
-  const displayedMoves = [...moveLog]
-
-  // Fill in empty rows to ensure the table has exactly 12 rows
-  while (displayedMoves.length < totalTurns) {
-    displayedMoves.push({
-      player: undefined,
-      token: undefined,
-      position: undefined,
-    })
-  }
-
+const History = ({ moveLog, currentPlayer }: HistoryProps) => {
   return (
-    <TableContainer
-      component={Paper}
-      elevation={12}
+    <Paper
+      elevation={4}
       sx={{
-        mt: 3,
-        maxWidth: 600,
-        margin: '0 auto',
-        border: '1px solid black',
+        width: 600,
+        maxWidth: '100%',
+        mx: 'auto',
+        my: 2,
+        p: 2,
+        backgroundColor: '#f5f5f5',
       }}
     >
-      <Typography variant="h6">History</Typography>
-      <Table size="small" aria-label="Move History">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">Turn</TableCell>
-            <TableCell align="center">Red</TableCell>
-            <TableCell align="center">Black</TableCell>
-            <TableCell align="center">To Tile</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {displayedMoves.map((move, index) => (
-            <TableRow
-              key={index}
-              sx={{
-                backgroundColor:
-                  index === moveLog.length
-                    ? currentPlayer === 'red'
-                      ? 'rgba(255, 0, 0, 0.2)' // Light red for red's turn
-                      : 'rgba(0, 0, 0, 0.2)' // Light grey for black's turn
-                    : 'inherit',
-              }}
-            >
-              <TableCell align="center">{index + 1}</TableCell>
-              <TableCell align="center">
-                {move.player === 'red' ? (
-                  move.replacedToken &&
-                  move.replacedToken.replacedBy === 'black' ? (
-                    <span
-                      style={{ textDecoration: 'line-through', color: 'black' }}
-                    >
-                      {move.token?.number ?? ''}
-                    </span>
-                  ) : (
-                    (move.token?.number ?? '')
-                  )
-                ) : (
-                  ''
-                )}
-              </TableCell>
-              <TableCell align="center">
-                {move.player === 'black' ? (
-                  move.replacedToken &&
-                  move.replacedToken.replacedBy === 'red' ? (
-                    <span
-                      style={{ textDecoration: 'line-through', color: 'red' }}
-                    >
-                      {move.token?.number ?? ''}
-                    </span>
-                  ) : (
-                    (move.token?.number ?? '')
-                  )
-                ) : (
-                  ''
-                )}
-              </TableCell>
-              <TableCell align="center">
-                {move.position
-                  ? `(${move.position[0] + 1}, ${move.position[1] + 1})`
-                  : ''}
-              </TableCell>
-            </TableRow>
+      <Typography variant="h6" gutterBottom>
+        Move History
+      </Typography>
+      {moveLog.length === 0 ? (
+        <Typography variant="body2">No moves yet.</Typography>
+      ) : (
+        <Box
+          component="ol"
+          sx={{
+            paddingLeft: '1.5rem',
+            maxHeight: '200px',
+            overflowY: 'auto',
+          }}
+        >
+          {moveLog.map((move, index) => (
+            <Typography component="li" variant="body2" key={index}>
+              {move.player} placed token {move.token?.id} (Number{' '}
+              {move.token?.number}) at{' '}
+              {move.position
+                ? `[${move.position[0] + 1}, ${move.position[1] + 1}]`
+                : ''}
+              {move.replacedToken
+                ? `, replacing token ${move.replacedToken.token.id} (Number ${move.replacedToken.token.number}) with ${move.replacedToken.replacedBy}`
+                : ''}
+            </Typography>
           ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+        </Box>
+      )}
+    </Paper>
   )
 }
 

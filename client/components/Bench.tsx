@@ -1,24 +1,26 @@
+// client/components/Bench.tsx
+
+import React from 'react'
 import { Box, Grid, Paper, useTheme } from '@mui/material'
-import Token from './Token.tsx'
-import { Token as TokenType } from './App.tsx'
+import Token from './Token'
+import { Token as TokenType } from '../types'
 
 type BenchProps = {
   tokens: TokenType[]
   onTokenClick: (token: TokenType) => void
+  isAIThinking: boolean
 }
 
-const Bench = ({ tokens, onTokenClick }: BenchProps) => {
+const Bench = ({ tokens, onTokenClick, isAIThinking }: BenchProps) => {
   const theme = useTheme()
   return (
     <Paper
       elevation={4}
       sx={{
-        // width: theme.customSizes.componentWidth,
-        width: 600,
-        maxWidth: '100%',
+        width: '100%',
+        maxWidth: 600,
         mx: 'auto',
         my: 2,
-        mt: 3,
         p: 2,
         display: 'flex',
         justifyContent: 'center',
@@ -39,8 +41,8 @@ const Bench = ({ tokens, onTokenClick }: BenchProps) => {
           spacing={1}
           sx={{
             justifyContent: 'center',
-            width: tokens.length === 6 ? 'fit-content' : '80%', // Ensure the bench remains consistent
-            minWidth: '420px', // Adjust this to match the required width of the bench
+            width: tokens.length === 6 ? 'fit-content' : '80%',
+            minWidth: { xs: '280px', sm: '420px' }, // Adjusted for smaller screens
           }}
         >
           {tokens.map(
@@ -48,7 +50,7 @@ const Bench = ({ tokens, onTokenClick }: BenchProps) => {
               !token.played && (
                 <Grid
                   item
-                  key={index}
+                  key={token.id} // Use unique id as key
                   sx={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -58,7 +60,18 @@ const Bench = ({ tokens, onTokenClick }: BenchProps) => {
                   <Token
                     number={token.number}
                     color={token.color}
-                    onClick={() => onTokenClick(token)}
+                    onClick={() => {
+                      if (!isAIThinking) {
+                        console.log(
+                          `Bench Token Clicked: Number ${token.number}, Color ${token.color}`,
+                        )
+                        onTokenClick(token)
+                      } else {
+                        console.log(
+                          'Bench Token Click attempted during AI thinking. Ignored.',
+                        )
+                      }
+                    }} // Disable click if AI is thinking
                     available={token.available}
                     selected={token.selected}
                   />

@@ -1,5 +1,20 @@
-body {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
   background-color: #faf8f1;
   color: #0a1520;
   font-family: 'Poppins', sans-serif;
+  height: 100%; /* Ensure body and html take full height */
+}
+
+#app {
+  margin: 0;
+  padding: 0;
 }

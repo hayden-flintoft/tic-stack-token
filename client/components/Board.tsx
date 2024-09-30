@@ -1,15 +1,16 @@
+// client/components/Board.tsx
+
 import { Box, Grid } from '@mui/material'
-import Tile from './Tile.tsx'
-import Token from './Token.tsx'
-import { Token as TokenType } from './App.tsx'
+import Tile from './Tile'
+import TokenComponent from './Token'
+import { Token, Player } from '../types'
 
 type BoardProps = {
-  boardState: (TokenType | null)[][]
+  boardState: (Token | null)[][]
   onPlaceToken: (row: number, col: number) => void
-  currentPlayer: 'red' | 'black'
+  currentPlayer: Player
 }
 
-// TODO: This is hard to read and harder to write. Needs to be rewritten and refactored.
 const Board = ({ boardState, onPlaceToken, currentPlayer }: BoardProps) => {
   return (
     <Box
@@ -18,12 +19,18 @@ const Board = ({ boardState, onPlaceToken, currentPlayer }: BoardProps) => {
         justifyContent: 'center',
         alignItems: 'center',
         my: 2,
+        width: '100%',
       }}
     >
       <Grid
         container
         spacing={1}
-        sx={{ display: 'flex', justifyContent: 'center', width: 'fit-content' }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          width: '100%',
+          maxWidth: 300,
+        }} // Adjusted for smaller screens
       >
         {boardState.map((row, rowIndex) => (
           <Grid
@@ -37,20 +44,32 @@ const Board = ({ boardState, onPlaceToken, currentPlayer }: BoardProps) => {
               <Grid
                 item
                 key={colIndex}
-                sx={{ display: 'flex', justifyContent: 'center' }}
-                onClick={() => onPlaceToken(rowIndex, colIndex)}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  width: { xs: 80, sm: 100 }, // Responsive tile size
+                  height: { xs: 80, sm: 100 },
+                }}
+                onClick={() => {
+                  console.log(
+                    `Tile Clicked at Row ${rowIndex}, Column ${colIndex}`,
+                  )
+                  onPlaceToken(rowIndex, colIndex)
+                }}
               >
-                <Tile
-                  currentPlayer={currentPlayer}
-                  value={`Cell ${rowIndex + 1}-${colIndex + 1}`}
-                >
+                <Tile currentPlayer={currentPlayer}>
                   {cell && (
-                    <Token
+                    <TokenComponent
                       number={cell.number}
                       color={cell.color}
                       available={cell.available}
                       selected={cell.selected}
-                      onClick={() => {}}
+                      onClick={() => {
+                        console.log(
+                          `Token Clicked on Board: Number ${cell.number}, Color ${cell.color}`,
+                        )
+                        // Handle token click if needed
+                      }}
                     />
                   )}
                 </Tile>

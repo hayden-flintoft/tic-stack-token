@@ -1,5 +1,6 @@
 {
   "name": "boilerplate-react",
+  "homepage": "https://flintstrike.co.nz",
   "type": "module",
   "version": "0.2.0",
   "description": "React!",
@@ -50,8 +51,10 @@
   },
   "browserslist": "> 2%, not dead",
   "dependencies": {
-    "@emotion/react": "^11.13.0",
+    "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@mui/material": "^5.16.6"
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.16.7",
+    "uuid": "^10.0.0"
   }
 }
